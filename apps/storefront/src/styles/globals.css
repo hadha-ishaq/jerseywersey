@@ -2,6 +2,45 @@
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
 
+@layer base {
+  :root {
+    /* JerseyWersey design tokens */
+    --jw-bg: 10 11 13;
+    --jw-bg-charcoal: 20 21 24;
+    --jw-bg-smoke: 28 30 34;
+    --jw-accent: 0 226 91;
+    --jw-offwhite: 245 245 243;
+    --jw-foreground: 255 255 255;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+
+  body {
+    @apply bg-white text-neutral-900 antialiased;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  }
+
+  ::selection {
+    background-color: rgb(var(--jw-accent));
+    color: rgb(var(--jw-bg));
+  }
+}
+
 @layer utilities {
   /* Chrome, Safari and Opera */
   .no-scrollbar::-webkit-scrollbar {
@@ -51,7 +90,66 @@
 
 @layer components {
   .content-container {
-    @apply max-w-[1440px] w-full mx-auto px-6;
+    @apply max-w-[1440px] w-full mx-auto px-4 small:px-6;
+  }
+
+  /* ===== JerseyWersey design system ===== */
+
+  /* Editorial headline — bold, tight, uppercase */
+  .jw-headline {
+    @apply font-semibold uppercase tracking-tighter text-4xl leading-[1.05] small:text-6xl small:leading-[1.02];
+  }
+
+  .jw-headline-xl {
+    @apply font-semibold uppercase tracking-tightest text-5xl leading-[1.02] small:text-7xl small:leading-[1.0];
+  }
+
+  /* Eyebrow / section label */
+  .jw-eyebrow {
+    @apply text-xs font-semibold uppercase tracking-widest;
+  }
+
+  /* Primary button — solid pitch-black, white text */
+  .jw-btn-primary {
+    @apply inline-flex items-center justify-center gap-2 h-12 px-8 bg-pitch text-white text-sm font-semibold uppercase tracking-wider transition-colors duration-200 hover:bg-pitch-charcoal focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jersey focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50;
+  }
+
+  /* Accent button — vivid pitch green, black text */
+  .jw-btn-accent {
+    @apply inline-flex items-center justify-center gap-2 h-12 px-8 bg-jersey text-pitch text-sm font-semibold uppercase tracking-wider transition-colors duration-200 hover:bg-jersey-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pitch focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50;
+  }
+
+  /* Secondary button — outlined */
+  .jw-btn-secondary {
+    @apply inline-flex items-center justify-center gap-2 h-12 px-8 border border-neutral-900 text-neutral-900 text-sm font-semibold uppercase tracking-wider transition-colors duration-200 hover:bg-neutral-900 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50;
+  }
+
+  /* Dark section surface */
+  .jw-surface-dark {
+    @apply bg-pitch text-white;
+  }
+
+  /* Off-white section surface */
+  .jw-surface-offwhite {
+    @apply bg-offwhite;
+  }
+
+  /* Product card image hover — subtle zoom */
+  .jw-image-zoom img {
+    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .jw-image-zoom:hover img {
+    transform: scale(1.05);
+  }
+
+  /* Wordmark */
+  .jw-wordmark {
+    @apply font-semibold uppercase tracking-[0.2em] text-sm small:text-base;
+  }
+
+  /* Focus ring for links/buttons */
+  .jw-focus-ring {
+    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jersey focus-visible:ring-offset-2;
   }
 
   .contrast-btn {

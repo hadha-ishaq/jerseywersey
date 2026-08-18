@@ -38,6 +38,9 @@ export default function ProductActions({
 
   const [options, setOptions] = useState<Record<string, string | undefined>>({})
   const [isAdding, setIsAdding] = useState(false)
+  const [isBuyingNow, setIsBuyingNow] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const [quantity, setQuantity] = useState(1)
   const countryCode = useParams().countryCode as string
 
   // If there is only 1 variant, preselect the options
@@ -116,6 +119,22 @@ export default function ProductActions({
     return false
   }, [selectedVariant])
 
+  const maxQuantity = useMemo(() => {
+    if (!selectedVariant?.manage_inventory || selectedVariant.allow_backorder) {
+      return 10
+    }
+
+    return Math.max(selectedVariant.inventory_quantity || 0, 0)
+  }, [selectedVariant])
+
+  const canPurchase =
+    inStock &&
+    !!selectedVariant &&
+    !disabled &&
+    !isAdding &&
+    !isBuyingNow &&
+    isValidVariant
+
   const actionsRef = useRef<HTMLDivElement>(null)
 
   const inView = useIntersection(actionsRef, "0px")
@@ -125,14 +144,39 @@ export default function ProductActions({
     if (!selectedVariant?.id) return null
 
     setIsAdding(true)
+    setError(null)
 
-    await addToCart({
-      variantId: selectedVariant.id,
-      quantity: 1,
-      countryCode,
-    })
+    try {
+      await addToCart({
+        variantId: selectedVariant.id,
+        quantity,
+        countryCode,
+      })
+    } catch {
+      setError("We could not add this jersey to your cart. Please try again.")
+    } finally {
+      setIsAdding(false)
+    }
+  }
 
-    setIsAdding(false)
+  const handleBuyNow = async () => {
+    if (!selectedVariant?.id) return null
+
+    setIsBuyingNow(true)
+    setError(null)
+
+    try {
+      await addToCart({
+        variantId: selectedVariant.id,
+        quantity,
+        countryCode,
+      })
+
+      router.push("/checkout")
+    } catch {
+      setError("We could not start checkout. Please try again.")
+      setIsBuyingNow(false)
+    }
   }
 
   return (
@@ -162,6 +206,37 @@ export default function ProductActions({
 
         <ProductPrice product={product} variant={selectedVariant} />
 
+        <div className="flex items-center justify-between border border-neutral-200 rounded-md px-3 py-2">
+          <span className="text-xs font-semibold uppercase tracking-widest text-neutral-500">
+            Quantity
+          </span>
+          <div className="flex items-center gap-3" aria-label="Quantity">
+            <button
+              type="button"
+              onClick={() => setQuantity((current) => Math.max(1, current - 1))}
+              disabled={!canPurchase || quantity <= 1}
+              className="flex h-8 w-8 items-center justify-center rounded-md border border-neutral-200 text-lg leading-none disabled:cursor-not-allowed disabled:opacity-40"
+              aria-label="Decrease quantity"
+            >
+              -
+            </button>
+            <span className="min-w-6 text-center text-sm font-medium">
+              {quantity}
+            </span>
+            <button
+              type="button"
+              onClick={() =>
+                setQuantity((current) => Math.min(maxQuantity, current + 1))
+              }
+              disabled={!canPurchase || quantity >= maxQuantity}
+              className="flex h-8 w-8 items-center justify-center rounded-md border border-neutral-200 text-lg leading-none disabled:cursor-not-allowed disabled:opacity-40"
+              aria-label="Increase quantity"
+            >
+              +
+            </button>
+          </div>
+        </div>
+
         <Button
           onClick={handleAddToCart}
           disabled={
@@ -176,12 +251,27 @@ export default function ProductActions({
           isLoading={isAdding}
           data-testid="add-product-button"
         >
-          {!selectedVariant && !options
+          {!selectedVariant
             ? "Select variant"
             : !inStock || !isValidVariant
             ? "Out of stock"
             : "Add to cart"}
         </Button>
+        <Button
+          onClick={handleBuyNow}
+          disabled={!canPurchase || isBuyingNow}
+          variant="secondary"
+          className="w-full h-10"
+          isLoading={isBuyingNow}
+          data-testid="buy-now-button"
+        >
+          Buy now
+        </Button>
+        {error && (
+          <p className="text-small-regular text-rose-600" role="alert">
+            {error}
+          </p>
+        )}
         <MobileActions
           product={product}
           variant={selectedVariant}

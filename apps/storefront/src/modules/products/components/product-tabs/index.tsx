@@ -26,9 +26,9 @@ const ProductTabs = ({ product }: ProductTabsProps) => {
   return (
     <div className="w-full">
       <Accordion type="multiple">
-        {tabs.map((tab, i) => (
+        {tabs.map((tab) => (
           <Accordion.Item
-            key={i}
+            key={tab.label}
             title={tab.label}
             headingSize="medium"
             value={tab.label}
@@ -48,28 +48,32 @@ const ProductInfoTab = ({ product }: ProductTabsProps) => {
         <div className="flex flex-col gap-y-4">
           <div>
             <span className="font-semibold">Material</span>
-            <p>{product.material ? product.material : "-"}</p>
+            <p>{product.material ? product.material : "See description"}</p>
           </div>
           <div>
             <span className="font-semibold">Country of origin</span>
-            <p>{product.origin_country ? product.origin_country : "-"}</p>
+            <p>
+              {product.origin_country
+                ? product.origin_country.toUpperCase()
+                : "Provided on the garment label"}
+            </p>
           </div>
           <div>
-            <span className="font-semibold">Type</span>
-            <p>{product.type ? product.type.value : "-"}</p>
+            <span className="font-semibold">Style</span>
+            <p>{product.type ? product.type.value : "Football jersey"}</p>
           </div>
         </div>
         <div className="flex flex-col gap-y-4">
           <div>
             <span className="font-semibold">Weight</span>
-            <p>{product.weight ? `${product.weight} g` : "-"}</p>
+            <p>{product.weight ? `${product.weight} g` : "Lightweight kit"}</p>
           </div>
           <div>
             <span className="font-semibold">Dimensions</span>
             <p>
               {product.length && product.width && product.height
                 ? `${product.length}L x ${product.width}W x ${product.height}H`
-                : "-"}
+                : "Varies by size"}
             </p>
           </div>
         </div>
@@ -85,31 +89,31 @@ const ShippingInfoTab = () => {
         <div className="flex items-start gap-x-2">
           <FastDelivery />
           <div>
-            <span className="font-semibold">Fast delivery</span>
+            <span className="font-semibold">India delivery</span>
             <p className="max-w-sm">
-              Your package will arrive in 3-5 business days at your pick up
-              location or in the comfort of your home.
+              Delivery methods and charges are calculated at checkout from the
+              India region configured in Medusa.
             </p>
           </div>
         </div>
         <div className="flex items-start gap-x-2">
           <Refresh />
           <div>
-            <span className="font-semibold">Simple exchanges</span>
+            <span className="font-semibold">Size support</span>
             <p className="max-w-sm">
-              Is the fit not quite right? No worries - we&apos;ll exchange your
-              product for a new one.
+              Check the size selector and product details before ordering.
+              Player-fit jerseys can feel tighter than regular-fit shirts.
             </p>
           </div>
         </div>
         <div className="flex items-start gap-x-2">
           <Back />
           <div>
-            <span className="font-semibold">Easy returns</span>
+            <span className="font-semibold">Returns and refunds</span>
             <p className="max-w-sm">
-              Just return your product and we&apos;ll refund your money. No
-              questions asked – we&apos;ll do our best to make sure your return
-              is hassle-free.
+              Returns are reviewed against the JerseyWersey Returns & Refunds
+              policy. Keep tags and packaging intact until you are sure about
+              the fit.
             </p>
           </div>
         </div>

@@ -5,19 +5,12 @@ import useToggleState from "@lib/hooks/use-toggle-state"
 import { ArrowRightMini, XMark } from "@medusajs/icons"
 import { HttpTypes } from "@medusajs/types"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
-import { Text, clx } from "@modules/common/components/ui"
+import { clx } from "@modules/common/components/ui"
 import { Fragment } from "react"
 import CountrySelect from "../country-select"
 import LanguageSelect from "../language-select"
 import { Locale } from "@lib/data/locales"
-
-
-const SideMenuItems = {
-  Home: "/",
-  Store: "/store",
-  Account: "/account",
-  Cart: "/cart",
-}
+import Search from "../search"
 
 type SideMenuProps = {
   regions: HttpTypes.StoreRegion[] | null
@@ -38,7 +31,8 @@ const SideMenu = ({ regions, locales, currentLocale }: SideMenuProps) => {
               <div className="relative flex h-full">
                 <Popover.Button
                   data-testid="nav-menu-button"
-                  className="relative h-full flex items-center transition-all ease-out duration-200 focus:outline-none hover:text-ui-fg-base"
+                  className="relative h-full flex items-center px-2 transition-all ease-out duration-200 focus:outline-none hover:text-neutral-600"
+                  aria-label="Open menu"
                 >
                   Menu
                 </Popover.Button>
@@ -46,7 +40,7 @@ const SideMenu = ({ regions, locales, currentLocale }: SideMenuProps) => {
 
               {open && (
                 <div
-                  className="fixed inset-0 z-[50] bg-black/0 pointer-events-auto"
+                  className="fixed inset-0 z-[50] bg-black/40 pointer-events-auto"
                   onClick={close}
                   data-testid="side-menu-backdrop"
                 />
@@ -57,37 +51,50 @@ const SideMenu = ({ regions, locales, currentLocale }: SideMenuProps) => {
                 as={Fragment}
                 enter="transition ease-out duration-150"
                 enterFrom="opacity-0"
-                enterTo="opacity-100 backdrop-blur-2xl"
+                enterTo="opacity-100"
                 leave="transition ease-in duration-150"
-                leaveFrom="opacity-100 backdrop-blur-2xl"
+                leaveFrom="opacity-100"
                 leaveTo="opacity-0"
               >
-                <PopoverPanel className="flex flex-col absolute w-full pr-4 sm:pr-0 sm:w-1/3 2xl:w-1/4 sm:min-w-min h-[calc(100vh-1rem)] z-[51] inset-x-0 text-sm text-ui-fg-on-color m-2 backdrop-blur-2xl">
+                <PopoverPanel className="flex flex-col absolute w-full pr-4 sm:pr-0 sm:w-2/3 2xl:w-1/3 sm:min-w-min h-[calc(100vh-1rem)] z-[51] inset-x-0 text-sm m-2">
                   <div
                     data-testid="nav-menu-popup"
-                    className="flex flex-col h-full bg-[rgba(3,7,18,0.5)] rounded-rounded justify-between p-6"
+                    className="flex flex-col h-full bg-pitch text-white justify-between p-6"
                   >
-                    <div className="flex justify-end" id="xmark">
-                      <button data-testid="close-menu-button" onClick={close}>
+                    <div className="flex items-center justify-between">
+                      <span className="jw-wordmark">JerseyWersey</span>
+                      <button
+                        data-testid="close-menu-button"
+                        onClick={close}
+                        className="p-2 hover:text-neutral-300 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jersey"
+                        aria-label="Close menu"
+                      >
                         <XMark />
                       </button>
                     </div>
-                    <ul className="flex flex-col gap-6 items-start justify-start">
-                      {Object.entries(SideMenuItems).map(([name, href]) => {
-                        return (
-                          <li key={name}>
-                            <LocalizedClientLink
-                              href={href}
-                              className="text-3xl leading-10 hover:text-ui-fg-disabled"
-                              onClick={close}
-                              data-testid={`${name.toLowerCase()}-link`}
-                            >
-                              {name}
-                            </LocalizedClientLink>
-                          </li>
-                        )
-                      })}
+
+                    <Search />
+
+                    <ul className="flex flex-col gap-2 items-start justify-start">
+                      {[
+                        { name: "Home", href: "/" },
+                        { name: "Shop All", href: "/store" },
+                        { name: "Account", href: "/account" },
+                        { name: "Cart", href: "/cart" },
+                      ].map((item) => (
+                        <li key={item.name}>
+                          <LocalizedClientLink
+                            href={item.href}
+                            className="text-3xl leading-10 font-semibold uppercase tracking-tight hover:text-jersey transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jersey rounded-sm"
+                            onClick={close}
+                            data-testid={`${item.name.toLowerCase()}-link`}
+                          >
+                            {item.name}
+                          </LocalizedClientLink>
+                        </li>
+                      ))}
                     </ul>
+
                     <div className="flex flex-col gap-y-6">
                       {!!locales?.length && (
                         <div
@@ -126,10 +133,10 @@ const SideMenu = ({ regions, locales, currentLocale }: SideMenuProps) => {
                           )}
                         />
                       </div>
-                      <Text className="flex justify-between txt-compact-small">
-                        © {new Date().getFullYear()} Medusa Store. All rights
+                      <p className="flex justify-between text-xs text-neutral-400">
+                        © {new Date().getFullYear()} JerseyWersey. All rights
                         reserved.
-                      </Text>
+                      </p>
                     </div>
                   </div>
                 </PopoverPanel>

@@ -1,11 +1,11 @@
 import { HttpTypes } from "@medusajs/types"
+import { INDIAN_STATES } from "@lib/brand"
 import { Container } from "@modules/common/components/ui"
 import Checkbox from "@modules/common/components/checkbox"
 import Input from "@modules/common/components/input"
 import { mapKeys } from "lodash"
 import React, { useEffect, useMemo, useState } from "react"
 import AddressSelect from "../address-select"
-import CountrySelect from "../country-select"
 
 const ShippingAddress = ({
   customer,
@@ -25,7 +25,8 @@ const ShippingAddress = ({
     "shipping_address.company": cart?.shipping_address?.company || "",
     "shipping_address.postal_code": cart?.shipping_address?.postal_code || "",
     "shipping_address.city": cart?.shipping_address?.city || "",
-    "shipping_address.country_code": cart?.shipping_address?.country_code || "",
+    "shipping_address.country_code":
+      cart?.shipping_address?.country_code || "in",
     "shipping_address.province": cart?.shipping_address?.province || "",
     "shipping_address.phone": cart?.shipping_address?.phone || "",
     email: cart?.email || "",
@@ -58,7 +59,7 @@ const ShippingAddress = ({
         "shipping_address.company": address?.company || "",
         "shipping_address.postal_code": address?.postal_code || "",
         "shipping_address.city": address?.city || "",
-        "shipping_address.country_code": address?.country_code || "",
+        "shipping_address.country_code": address?.country_code || "in",
         "shipping_address.province": address?.province || "",
         "shipping_address.phone": address?.phone || "",
       }))
@@ -149,9 +150,12 @@ const ShippingAddress = ({
           data-testid="shipping-company-input"
         />
         <Input
-          label="Postal code"
+          label="PIN code"
           name="shipping_address.postal_code"
           autoComplete="postal-code"
+          inputMode="numeric"
+          pattern="[0-9]{6}"
+          title="Enter a valid 6-digit Indian PIN code."
           value={formData["shipping_address.postal_code"]}
           onChange={handleChange}
           required
@@ -166,23 +170,38 @@ const ShippingAddress = ({
           required
           data-testid="shipping-city-input"
         />
-        <CountrySelect
+        <input
+          type="hidden"
           name="shipping_address.country_code"
-          autoComplete="country"
-          region={cart?.region}
-          value={formData["shipping_address.country_code"]}
-          onChange={handleChange}
-          required
-          data-testid="shipping-country-select"
+          value="in"
+          readOnly
         />
-        <Input
-          label="State / Province"
-          name="shipping_address.province"
-          autoComplete="address-level1"
-          value={formData["shipping_address.province"]}
-          onChange={handleChange}
-          data-testid="shipping-province-input"
-        />
+        <div className="flex flex-col w-full">
+          <label
+            htmlFor="shipping-province-select"
+            className="mb-2 txt-compact-medium-plus text-ui-fg-subtle"
+          >
+            State
+            <span className="text-rose-500">*</span>
+          </label>
+          <select
+            id="shipping-province-select"
+            name="shipping_address.province"
+            autoComplete="address-level1"
+            value={formData["shipping_address.province"]}
+            onChange={handleChange}
+            required
+            className="block h-11 w-full rounded-md border border-ui-border-base bg-ui-bg-field px-4 text-ui-fg-base focus:shadow-borders-interactive-with-active focus:outline-none"
+            data-testid="shipping-province-input"
+          >
+            <option value="">Select state</option>
+            {INDIAN_STATES.map((state) => (
+              <option key={state} value={state}>
+                {state}
+              </option>
+            ))}
+          </select>
+        </div>
       </div>
       <div className="my-8">
         <Checkbox
@@ -209,6 +228,9 @@ const ShippingAddress = ({
           label="Phone"
           name="shipping_address.phone"
           autoComplete="tel"
+          inputMode="tel"
+          pattern="(?:\\+91[\\s-]?)?[6-9][0-9]{9}"
+          title="Enter a valid Indian mobile number."
           value={formData["shipping_address.phone"]}
           onChange={handleChange}
           data-testid="shipping-phone-input"

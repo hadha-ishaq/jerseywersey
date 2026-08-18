@@ -33,6 +33,56 @@ module.exports = {
           80: "#1F2937",
           90: "#111827",
         },
+        // JerseyWersey brand tokens
+        pitch: {
+          // Deep near-black used for the primary brand surfaces
+          DEFAULT: "#0A0B0D",
+          ink: "#0A0B0D",
+          // Slightly lighter near-black for secondary surfaces
+          charcoal: "#141518",
+          // Subtle off-black for hover surfaces
+          smoke: "#1C1E22",
+        },
+        jersey: {
+          // Football-inspired accent — vivid pitch green
+          DEFAULT: "#00E25B",
+          bright: "#00F563",
+          dark: "#00B54A",
+        },
+        offwhite: {
+          DEFAULT: "#F5F5F3",
+          warm: "#F7F7F5",
+          cool: "#EFEFED",
+        },
+      },
+      fontFamily: {
+        sans: [
+          "Inter",
+          "-apple-system",
+          "BlinkMacSystemFont",
+          "Segoe UI",
+          "Roboto",
+          "Helvetica Neue",
+          "Ubuntu",
+          "sans-serif",
+        ],
+        display: [
+          "Inter",
+          "-apple-system",
+          "BlinkMacSystemFont",
+          "Segoe UI",
+          "Roboto",
+          "Helvetica Neue",
+          "Ubuntu",
+          "sans-serif",
+        ],
+      },
+      letterSpacing: {
+        tightest: "-0.05em",
+        tighter: "-0.03em",
+        wide: "0.025em",
+        wider: "0.05em",
+        widest: "0.15em",
       },
       borderRadius: {
         none: "0px",
@@ -56,18 +106,6 @@ module.exports = {
       },
       fontSize: {
         "3xl": "2rem",
-      },
-      fontFamily: {
-        sans: [
-          "Inter",
-          "-apple-system",
-          "BlinkMacSystemFont",
-          "Segoe UI",
-          "Roboto",
-          "Helvetica Neue",
-          "Ubuntu",
-          "sans-serif",
-        ],
       },
       keyframes: {
         ring: {
