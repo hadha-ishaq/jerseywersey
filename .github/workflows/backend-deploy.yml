@@ -53,7 +53,7 @@ jobs:
             backend.tar.gz \
             "${{ secrets.CPANEL_USERNAME }}@${{ secrets.CPANEL_HOST }}:~/jerseywersey-backend/"
 
-      - name: Deploy and restart
+            - name: Deploy and restart
         run: |
           ssh \
             -o StrictHostKeyChecking=no \
@@ -62,13 +62,19 @@ jobs:
 
           cd ~/jerseywersey-backend
 
-          rm -rf current
-          mkdir -p current
+          rm -rf .deploy
+          mkdir -p .deploy
 
-          tar -xzf backend.tar.gz -C current
+          tar -xzf backend.tar.gz -C .deploy
           rm backend.tar.gz
 
-          cd current
+          find . -mindepth 1 -maxdepth 1 \
+            ! -name ".deploy" \
+            ! -name ".env" \
+            -exec rm -rf {} +
+
+          cp -a .deploy/. .
+          rm -rf .deploy
 
           npm install --omit=dev
 
