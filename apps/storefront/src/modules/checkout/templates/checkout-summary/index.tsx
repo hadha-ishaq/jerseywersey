@@ -8,21 +8,30 @@ import { HttpTypes } from "@medusajs/types"
 
 const CheckoutSummary = ({ cart }: { cart: HttpTypes.StoreCart }) => {
   return (
-    <div className="sticky top-0 flex flex-col-reverse small:flex-col gap-y-8 py-8 small:py-0 ">
-      <div className="w-full bg-white flex flex-col">
-        <Divider className="my-6 small:hidden" />
-        <Heading
-          level="h2"
-          className="flex flex-row text-3xl-regular items-baseline"
-        >
-          In your Cart
-        </Heading>
-        <Divider className="my-6" />
-        <CartTotals totals={cart} />
-        <ItemsPreviewTemplate cart={cart} />
-        <div className="my-6">
-          <DiscountCode cart={cart} />
+    <div className="small:sticky small:top-6 flex flex-col gap-y-4 small:gap-y-6">
+      <div className="rounded-2xl border border-neutral-200 bg-neutral-50/80 p-4 small:p-6 shadow-sm">
+        <div className="flex items-start justify-between gap-4">
+          <div>
+            <p className="jw-eyebrow text-ui-fg-subtle">Order summary</p>
+            <Heading
+              level="h2"
+              className="mt-2 text-2xl small:text-3xl text-ui-fg-base"
+            >
+              In your cart
+            </Heading>
+          </div>
+          <p className="hidden small:block text-small-regular text-ui-fg-muted text-right max-w-[10rem]">
+            Review items, discounts, and totals before payment.
+          </p>
         </div>
+
+        <Divider className="my-5" />
+        <CartTotals totals={cart} />
+        <div className="my-5">
+          <ItemsPreviewTemplate cart={cart} />
+        </div>
+        <Divider className="my-5" />
+        <DiscountCode cart={cart} />
       </div>
     </div>
   )

@@ -20,15 +20,15 @@ export default function TermsConditionsPage() {
         },
         {
           title: "Product information",
-          body: "We aim to keep titles, images, descriptions, variant options, pricing, and availability accurate. Product data is served from Medusa and may change as catalogue and inventory are updated.",
+          body: "We aim to keep titles, images, descriptions, variant options, pricing, and availability accurate. Product data may change as catalogue and inventory are updated.",
         },
         {
           title: "Checkout and payment",
-          body: "Orders are only confirmed after successful payment and order creation through the configured Medusa checkout flow. A UI message alone is not a completed order.",
+          body: "Orders are only confirmed after successful payment and order creation through the configured checkout flow. A UI message alone is not a completed order.",
         },
         {
           title: "Delivery and returns",
-          body: "Shipping, return, refund, and replacement handling follows the policies published on this storefront and the options configured for the India region in Medusa.",
+          body: "Shipping, return, refund, and replacement handling follows the policies published on this storefront and the options configured for the India region.",
         },
       ]}
       cta={{ label: "Shop Jerseys", href: "/store" }}

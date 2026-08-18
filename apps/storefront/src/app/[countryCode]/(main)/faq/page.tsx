@@ -16,11 +16,11 @@ export default function FaqPage() {
       blocks={[
         {
           title: "Are prices shown in INR?",
-          body: "Yes. JerseyWersey is configured as an India-only storefront and prices should display in rupees when the Medusa India region is configured correctly.",
+          body: "Yes. JerseyWersey is configured as an India-only storefront and prices should display in rupees when the India region is configured correctly.",
         },
         {
           title: "Can I checkout outside India?",
-          body: "No. The current storefront is built for Indian addresses only. Medusa still keeps its region and country model behind the scenes, but customers should not see international country selection.",
+          body: "No. The current storefront is built for Indian addresses only. Customers should not see an international country selector.",
         },
         {
           title: "How do I choose my size?",

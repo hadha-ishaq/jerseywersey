@@ -42,6 +42,7 @@ export default function PolicyPage({
         <aside className="text-sm text-neutral-500">
           <p className="font-semibold text-neutral-900">{BRAND.name}</p>
           <p className="mt-2">{BRAND.city}</p>
+          <p className="mt-2">{BRAND.addressLine}</p>
           <p className="mt-2">{BRAND.supportEmail}</p>
           <p>{BRAND.supportPhone}</p>
         </aside>

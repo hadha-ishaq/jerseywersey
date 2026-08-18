@@ -29,7 +29,7 @@ const BillingAddress = ({ cart }: { cart: HttpTypes.StoreCart | null }) => {
 
   return (
     <>
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 gap-4 small:grid-cols-2">
         <Input
           label="First name"
           name="billing_address.first_name"
@@ -105,7 +105,7 @@ const BillingAddress = ({ cart }: { cart: HttpTypes.StoreCart | null }) => {
             value={formData["billing_address.province"]}
             onChange={handleChange}
             required
-            className="block h-11 w-full rounded-md border border-ui-border-base bg-ui-bg-field px-4 text-ui-fg-base focus:shadow-borders-interactive-with-active focus:outline-none"
+            className="block h-11 w-full rounded-md border border-ui-border-base bg-ui-bg-field px-4 text-ui-fg-base focus:outline-none focus:shadow-borders-interactive-with-active"
             data-testid="billing-province-input"
           >
             <option value="">Select state</option>

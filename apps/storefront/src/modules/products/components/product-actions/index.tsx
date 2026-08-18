@@ -93,7 +93,7 @@ export default function ProductActions({
     }
 
     router.replace(pathname + "?" + params.toString())
-  }, [selectedVariant, isValidVariant])
+  }, [selectedVariant, isValidVariant, pathname, router, searchParams])
 
   // check if the selected variant is in stock
   const inStock = useMemo(() => {
@@ -207,7 +207,7 @@ export default function ProductActions({
         <ProductPrice product={product} variant={selectedVariant} />
 
         <div className="flex items-center justify-between border border-neutral-200 rounded-md px-3 py-2">
-          <span className="text-xs font-semibold uppercase tracking-widest text-neutral-500">
+          <span className="font-display text-xs font-semibold uppercase tracking-widest text-neutral-500">
             Quantity
           </span>
           <div className="flex items-center gap-3" aria-label="Quantity">

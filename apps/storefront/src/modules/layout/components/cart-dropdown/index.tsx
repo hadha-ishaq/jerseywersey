@@ -78,9 +78,19 @@ const CartDropdown = ({
       onMouseEnter={openAndCancel}
       onMouseLeave={close}
     >
+      <LocalizedClientLink
+        href="/cart"
+        className="flex h-full items-center px-2 py-1 text-xs font-semibold uppercase tracking-widest text-neutral-600 transition-colors hover:text-neutral-900 small:hidden"
+        data-testid="nav-cart-link-mobile"
+      >
+        Cart ({totalItems})
+      </LocalizedClientLink>
+
       <Popover className="relative h-full">
-        <PopoverButton className="h-full">
-          <span className="flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-neutral-600 hover:text-neutral-900 transition-colors px-2 py-1">
+        <PopoverButton
+          className="hidden h-full small:flex"
+        >
+          <span className="font-display flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-neutral-600 hover:text-neutral-900 transition-colors px-2 py-1">
             Cart ({totalItems})
           </span>
         </PopoverButton>
@@ -100,7 +110,7 @@ const CartDropdown = ({
             data-testid="nav-cart-dropdown"
           >
             <div className="p-5 flex items-center justify-between border-b border-neutral-100">
-              <h3 className="text-sm font-semibold uppercase tracking-widest">
+              <h3 className="font-display text-sm font-semibold uppercase tracking-widest">
                 Your Cart
               </h3>
               <span className="text-xs text-neutral-500">
@@ -196,6 +206,7 @@ const CartDropdown = ({
                   <LocalizedClientLink
                     href="/cart"
                     className="jw-btn-primary w-full"
+                    onClick={close}
                     data-testid="go-to-cart-button"
                   >
                     View Cart
@@ -203,6 +214,7 @@ const CartDropdown = ({
                   <LocalizedClientLink
                     href="/checkout?step=address"
                     className="jw-btn-accent w-full"
+                    onClick={close}
                   >
                     Checkout
                   </LocalizedClientLink>

@@ -6,7 +6,7 @@ const Hero = () => {
     <section className="relative w-full bg-pitch text-white overflow-hidden">
       {/* Subtle pitch-line texture */}
       <div
-        className="absolute inset-0 opacity-[0.04] pointer-events-none"
+        className="absolute inset-0 opacity-[0.1] pointer-events-none"
         style={{
           backgroundImage:
             "repeating-linear-gradient(90deg, transparent 0px, transparent 79px, rgba(255,255,255,1) 80px)",

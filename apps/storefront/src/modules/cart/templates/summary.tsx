@@ -26,18 +26,26 @@ const Summary = ({ cart }: SummaryProps) => {
   const step = getCheckoutStep(cart)
 
   return (
-    <div className="flex flex-col gap-y-4">
-      <Heading level="h2" className="text-[2rem] leading-[2.75rem]">
-        Summary
-      </Heading>
-      <DiscountCode cart={cart} />
-      <Divider />
-      <CartTotals totals={cart} />
+    <div className="rounded-2xl border border-neutral-200 bg-neutral-50/80 p-4 small:p-6 shadow-sm">
+      <div className="mb-4">
+        <p className="jw-eyebrow text-ui-fg-subtle">Checkout</p>
+        <Heading
+          level="h2"
+          className="mt-2 text-2xl small:text-[2rem] small:leading-[2.75rem] text-ui-fg-base"
+        >
+          Summary
+        </Heading>
+      </div>
+      <div className="space-y-4">
+        <CartTotals totals={cart} />
+        <DiscountCode cart={cart} />
+      </div>
+      <Divider className="my-5" />
       <LocalizedClientLink
         href={"/checkout?step=" + step}
         data-testid="checkout-button"
       >
-        <Button className="w-full h-10">Go to checkout</Button>
+        <Button className="h-11 w-full">Go to checkout</Button>
       </LocalizedClientLink>
     </div>
   )

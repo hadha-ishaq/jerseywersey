@@ -7,8 +7,8 @@ const TrustBar = () => {
       description: "Licensed quality you can trust",
     },
     {
-      title: "Worldwide Shipping",
-      description: "Delivered to your door",
+      title: "India Delivery",
+      description: "Delivered across India",
     },
     {
       title: "Secure Checkout",
@@ -16,7 +16,7 @@ const TrustBar = () => {
     },
     {
       title: "Easy Returns",
-      description: "30-day return policy",
+      description: "Clear return support",
     },
   ]
 

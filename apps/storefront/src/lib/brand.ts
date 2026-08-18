@@ -9,7 +9,9 @@ export const BRAND = {
     "India-first football jersey store for club kits, national team jerseys, retro shirts, and matchday essentials.",
   supportEmail: "support@jerseywersey.com",
   supportPhone: "+91 98765 43210",
-  city: "Mumbai, Maharashtra",
+  city: "Aligarh, Uttar Pradesh",
+  addressLine:
+    "JerseyWersey, Aligarh, Uttar Pradesh, India",
   copyright: `Copyright ${new Date().getFullYear()} JerseyWersey. All rights reserved.`,
 } as const
 
@@ -82,7 +84,7 @@ export const HERO = {
   trustItems: [
     { label: "India Delivery", description: "Trackable shipping nationwide" },
     { label: "INR Checkout", description: "Clear prices in rupees" },
-    { label: "Secure Payments", description: "Protected Medusa checkout" },
+    { label: "Secure Payments", description: "Protected checkout flow" },
   ],
 } as const
 

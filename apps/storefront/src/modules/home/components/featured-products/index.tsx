@@ -20,7 +20,7 @@ export default async function FeaturedProducts({
           <h2 className="jw-eyebrow text-neutral-900 mb-3">
             {HOMEPAGE.featuredProductsTitle}
           </h2>
-          <p className="text-2xl small:text-3xl font-semibold tracking-tight">
+          <p className="font-display text-2xl small:text-3xl font-semibold tracking-tight">
             {HOMEPAGE.featuredProductsSubtitle}
           </p>
         </div>

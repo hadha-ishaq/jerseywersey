@@ -17,6 +17,16 @@
     scroll-behavior: smooth;
   }
 
+  /* Display font for all headings across the storefront */
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-display;
+  }
+
   @media (prefers-reduced-motion: reduce) {
     html {
       scroll-behavior: auto;
@@ -97,31 +107,31 @@
 
   /* Editorial headline — bold, tight, uppercase */
   .jw-headline {
-    @apply font-semibold uppercase tracking-tighter text-4xl leading-[1.05] small:text-6xl small:leading-[1.02];
+    @apply font-display font-semibold uppercase tracking-tighter text-4xl leading-[1.05] small:text-6xl small:leading-[1.02];
   }
 
   .jw-headline-xl {
-    @apply font-semibold uppercase tracking-tightest text-5xl leading-[1.02] small:text-7xl small:leading-[1.0];
+    @apply font-display font-semibold uppercase tracking-tightest text-5xl leading-[1.02] small:text-7xl small:leading-[1.0];
   }
 
   /* Eyebrow / section label */
   .jw-eyebrow {
-    @apply text-xs font-semibold uppercase tracking-widest;
+    @apply font-display text-xs font-semibold uppercase tracking-widest;
   }
 
   /* Primary button — solid pitch-black, white text */
   .jw-btn-primary {
-    @apply inline-flex items-center justify-center gap-2 h-12 px-8 bg-pitch text-white text-sm font-semibold uppercase tracking-wider transition-colors duration-200 hover:bg-pitch-charcoal focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jersey focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50;
+    @apply font-display inline-flex items-center justify-center gap-2 h-12 px-8 bg-pitch text-white text-sm font-semibold uppercase tracking-wider transition-colors duration-200 hover:bg-pitch-charcoal focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jersey focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50;
   }
 
   /* Accent button — vivid pitch green, black text */
   .jw-btn-accent {
-    @apply inline-flex items-center justify-center gap-2 h-12 px-8 bg-jersey text-pitch text-sm font-semibold uppercase tracking-wider transition-colors duration-200 hover:bg-jersey-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pitch focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50;
+    @apply font-display inline-flex items-center justify-center gap-2 h-12 px-8 bg-jersey text-pitch text-sm font-semibold uppercase tracking-wider transition-colors duration-200 hover:bg-jersey-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-pitch focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50;
   }
 
   /* Secondary button — outlined */
   .jw-btn-secondary {
-    @apply inline-flex items-center justify-center gap-2 h-12 px-8 border border-neutral-900 text-neutral-900 text-sm font-semibold uppercase tracking-wider transition-colors duration-200 hover:bg-neutral-900 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50;
+    @apply font-display inline-flex items-center justify-center gap-2 h-12 px-8 border border-neutral-900 text-neutral-900 text-sm font-semibold uppercase tracking-wider transition-colors duration-200 hover:bg-neutral-900 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50;
   }
 
   /* Dark section surface */
@@ -144,7 +154,7 @@
 
   /* Wordmark */
   .jw-wordmark {
-    @apply font-semibold uppercase tracking-[0.2em] text-sm small:text-base;
+    @apply font-display font-semibold uppercase tracking-[0.2em] text-sm small:text-base;
   }
 
   /* Focus ring for links/buttons */

@@ -132,7 +132,7 @@ const LanguageSelect = ({
             {current && (
               <span className="txt-compact-small flex items-center gap-x-2">
                 {current.countryCode && (
-                  /* @ts-ignore */
+                  /* @ts-expect-error ReactCountryFlag types are incomplete */
                   <ReactCountryFlag
                     svg
                     style={{
@@ -165,9 +165,9 @@ const LanguageSelect = ({
                   value={o}
                   className="py-2 hover:bg-gray-200 px-3 cursor-pointer flex items-center gap-x-2"
                 >
-                  {o.countryCode ? (
-                    /* @ts-ignore */
-                    <ReactCountryFlag
+                {o.countryCode ? (
+                  /* @ts-expect-error ReactCountryFlag types are incomplete */
+                  <ReactCountryFlag
                       svg
                       style={{
                         width: "16px",

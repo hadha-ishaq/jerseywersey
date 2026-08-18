@@ -82,7 +82,7 @@ const ShippingAddress = ({
     if (cart && !cart.email && customer?.email) {
       setFormAddress(undefined, customer.email)
     }
-  }, [cart]) // Add cart as a dependency
+  }, [cart, customer?.email])
 
   const handleChange = (
     e: React.ChangeEvent<
@@ -98,8 +98,8 @@ const ShippingAddress = ({
   return (
     <>
       {customer && (addressesInRegion?.length || 0) > 0 && (
-        <Container className="mb-6 flex flex-col gap-y-4 p-5">
-          <p className="text-small-regular">
+        <Container className="mb-6 flex flex-col gap-y-4 border border-neutral-200 bg-neutral-50/80 p-4 small:p-5">
+          <p className="text-small-regular text-ui-fg-base">
             {`Hi ${customer.first_name}, do you want to use one of your saved addresses?`}
           </p>
           <AddressSelect
@@ -113,7 +113,7 @@ const ShippingAddress = ({
           />
         </Container>
       )}
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 gap-4 small:grid-cols-2">
         <Input
           label="First name"
           name="shipping_address.first_name"
@@ -191,7 +191,7 @@ const ShippingAddress = ({
             value={formData["shipping_address.province"]}
             onChange={handleChange}
             required
-            className="block h-11 w-full rounded-md border border-ui-border-base bg-ui-bg-field px-4 text-ui-fg-base focus:shadow-borders-interactive-with-active focus:outline-none"
+          className="block h-11 w-full rounded-md border border-ui-border-base bg-ui-bg-field px-4 text-ui-fg-base focus:outline-none focus:shadow-borders-interactive-with-active"
             data-testid="shipping-province-input"
           >
             <option value="">Select state</option>
@@ -212,7 +212,7 @@ const ShippingAddress = ({
           data-testid="billing-address-checkbox"
         />
       </div>
-      <div className="grid grid-cols-2 gap-4 mb-4">
+      <div className="mb-4 grid grid-cols-1 gap-4 small:grid-cols-2">
         <Input
           label="Email"
           name="email"

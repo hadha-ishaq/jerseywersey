@@ -1,10 +1,11 @@
 "use client"
 
+import { CHECKOUT } from "@lib/brand"
+import { HttpTypes } from "@medusajs/types"
 import { Heading, Text, clx } from "@modules/common/components/ui"
+import { useSearchParams } from "next/navigation"
 
 import PaymentButton from "../payment-button"
-import { useSearchParams } from "next/navigation"
-import { HttpTypes } from "@medusajs/types"
 
 const Review = ({ cart }: { cart: HttpTypes.StoreCart }) => {
   const searchParams = useSearchParams()
@@ -12,7 +13,10 @@ const Review = ({ cart }: { cart: HttpTypes.StoreCart }) => {
   const isOpen = searchParams.get("step") === "review"
 
   const paidByGiftcard = !!(
-    (cart as unknown as Record<string, unknown>)?.gift_cards && ((cart as unknown as Record<string, unknown>)?.gift_cards as unknown[])?.length > 0 && cart?.total === 0
+    (cart as unknown as Record<string, unknown>)?.gift_cards &&
+    ((cart as unknown as Record<string, unknown>)?.gift_cards as unknown[])
+      ?.length > 0 &&
+    cart?.total === 0
   )
 
   const previousStepsCompleted =
@@ -21,12 +25,12 @@ const Review = ({ cart }: { cart: HttpTypes.StoreCart }) => {
     (cart.payment_collection || paidByGiftcard)
 
   return (
-    <div className="bg-white">
-      <div className="flex flex-row items-center justify-between mb-6">
+    <section className="rounded-2xl border border-neutral-200 bg-white p-4 small:p-6 shadow-sm">
+      <div className="mb-6 flex flex-col gap-3 small:flex-row small:items-center small:justify-between">
         <Heading
           level="h2"
           className={clx(
-            "flex flex-row text-3xl-regular gap-x-2 items-baseline",
+            "flex flex-row items-baseline gap-x-2 text-2xl small:text-3xl text-ui-fg-base",
             {
               "opacity-50 pointer-events-none select-none": !isOpen,
             }
@@ -35,22 +39,21 @@ const Review = ({ cart }: { cart: HttpTypes.StoreCart }) => {
           Review
         </Heading>
       </div>
+
       {isOpen && previousStepsCompleted && (
         <>
-          <div className="flex items-start gap-x-1 w-full mb-6">
-            <div className="w-full">
-              <Text className="txt-medium-plus text-ui-fg-base mb-1">
-                By clicking the Place Order button, you confirm that you have
-                read, understand and accept our Terms of Use, Terms of Sale and
-                Returns Policy and acknowledge that you have read Medusa
-                Store&apos;s Privacy Policy.
-              </Text>
-            </div>
+          <div className="mb-6 rounded-xl border border-neutral-200 bg-neutral-50/80 p-4">
+            <Text className="jw-eyebrow mb-2 text-ui-fg-subtle">
+              Final check
+            </Text>
+            <Text className="text-base-regular text-ui-fg-base">
+              {CHECKOUT.termsNote}
+            </Text>
           </div>
           <PaymentButton cart={cart} data-testid="submit-order-button" />
         </>
       )}
-    </div>
+    </section>
   )
 }
 

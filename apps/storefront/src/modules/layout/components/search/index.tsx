@@ -94,7 +94,7 @@ const Search = () => {
     <>
       <button
         onClick={open}
-        className="flex items-center gap-2 text-xs font-semibold uppercase tracking-widest hover:opacity-70 transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jersey rounded-sm px-2 py-1"
+        className="font-display flex items-center gap-2 text-xs font-semibold uppercase tracking-widest hover:opacity-70 transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jersey rounded-sm px-2 py-1"
         aria-label="Search products"
         data-testid="nav-search-button"
       >
@@ -170,7 +170,7 @@ const Search = () => {
                   </p>
                 ) : results.length === 0 ? (
                   <p className="text-sm text-neutral-500 py-8 text-center">
-                    No jerseys found for "{query}". Try a different
+                    No jerseys found for &quot;{query}&quot;. Try a different
                     search.
                   </p>
                 ) : (

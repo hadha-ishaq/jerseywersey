@@ -9,7 +9,7 @@ const FeaturedCategories = ({
 }: {
   categories: HttpTypes.StoreProductCategory[]
 }) => {
-  // Only show categories that map to actual Medusa data
+  // Only show categories that map to actual live store data
   const featured = categories.filter((c) => {
     if (!c.parent_category) return false
     const handle = c.handle?.toLowerCase() ?? ""
@@ -37,7 +37,7 @@ const FeaturedCategories = ({
             <h2 className="jw-eyebrow text-neutral-900 mb-3">
               {HOMEPAGE.featuredCategoriesTitle}
             </h2>
-            <p className="text-2xl small:text-3xl font-semibold tracking-tight">
+            <p className="font-display text-2xl small:text-3xl font-semibold tracking-tight">
               {HOMEPAGE.featuredCategoriesSubtitle}
             </p>
           </div>

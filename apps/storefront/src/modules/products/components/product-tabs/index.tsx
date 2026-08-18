@@ -92,7 +92,7 @@ const ShippingInfoTab = () => {
             <span className="font-semibold">India delivery</span>
             <p className="max-w-sm">
               Delivery methods and charges are calculated at checkout from the
-              India region configured in Medusa.
+              India region configured for your store.
             </p>
           </div>
         </div>

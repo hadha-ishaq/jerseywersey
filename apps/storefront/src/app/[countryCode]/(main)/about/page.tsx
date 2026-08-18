@@ -16,7 +16,7 @@ export default function AboutPage() {
       blocks={[
         {
           title: "What we sell",
-          body: "We focus on football jerseys across club teams, national teams, retro-inspired shirts, and new-season drops. Product availability depends on the catalogue configured in Medusa, so every product shown is pulled from the live store data.",
+          body: "We focus on football jerseys across club teams, national teams, retro-inspired shirts, and new-season drops. Product availability depends on the live store catalogue, so every product shown is pulled from current data.",
         },
         {
           title: "Why India-only",

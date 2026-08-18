@@ -12,7 +12,7 @@ export default function ShippingDeliveryPage() {
     <PolicyPage
       eyebrow="Shipping"
       title="Trackable delivery across India."
-      description="Delivery options and prices are calculated from the live Medusa shipping methods available for your cart."
+      description="Delivery options and prices are calculated from the live shipping methods available for your cart."
       blocks={[
         {
           title: "Delivery coverage",
@@ -20,7 +20,7 @@ export default function ShippingDeliveryPage() {
         },
         {
           title: "Shipping methods",
-          body: "Available shipping methods are fetched from Medusa during checkout. If no delivery method appears, the store's India region, fulfillment provider, or shipping options need to be configured in Medusa Admin.",
+          body: "Available shipping methods are fetched during checkout. If no delivery method appears, the store's India region, fulfillment provider, or shipping options need to be configured in the admin.",
         },
         {
           title: "Order tracking",
