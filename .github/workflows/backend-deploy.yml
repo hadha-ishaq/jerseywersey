@@ -22,7 +22,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 24
           cache: npm
 
       - name: Install dependencies
@@ -46,32 +46,35 @@ jobs:
           ssh-private-key: ${{ secrets.CPANEL_SSH_KEY }}
 
       - name: Upload backend
-        uses: appleboy/scp-action@v0.1.7
-        with:
-          host: ${{ secrets.CPANEL_HOST }}
-          username: ${{ secrets.CPANEL_USERNAME }}
-          port: ${{ secrets.CPANEL_PORT }}
-          source: "backend.tar.gz"
-          target: "~/jerseywersey-backend"
+        run: |
+          scp \
+            -o StrictHostKeyChecking=no \
+            -P "${{ secrets.CPANEL_PORT }}" \
+            backend.tar.gz \
+            "${{ secrets.CPANEL_USERNAME }}@${{ secrets.CPANEL_HOST }}:~/jerseywersey-backend/"
 
       - name: Deploy and restart
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ secrets.CPANEL_HOST }}
-          username: ${{ secrets.CPANEL_USERNAME }}
-          port: ${{ secrets.CPANEL_PORT }}
-          script: |
-            cd ~/jerseywersey-backend
+        run: |
+          ssh \
+            -o StrictHostKeyChecking=no \
+            -p "${{ secrets.CPANEL_PORT }}" \
+            "${{ secrets.CPANEL_USERNAME }}@${{ secrets.CPANEL_HOST }}" << 'EOF'
 
-            rm -rf current
-            mkdir -p current
+          cd ~/jerseywersey-backend
 
-            tar -xzf backend.tar.gz -C current
-            rm backend.tar.gz
+          rm -rf current
+          mkdir -p current
 
-            cd current
+          tar -xzf backend.tar.gz -C current
+          rm backend.tar.gz
 
-            npm install --omit=dev
+          cd current
 
-            mkdir -p tmp
-            touch tmp/restart.txt
+          npm install --omit=dev
+
+          mkdir -p tmp
+          touch tmp/restart.txt
+
+          echo "Deployment completed successfully."
+
+          EOF
