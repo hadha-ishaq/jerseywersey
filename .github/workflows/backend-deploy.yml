@@ -40,12 +40,16 @@ jobs:
           tar -czf backend.tar.gz \
             -C apps/backend/.medusa/server .
 
+      - name: Setup SSH
+        uses: webfactory/ssh-agent@v0.9.1
+        with:
+          ssh-private-key: ${{ secrets.CPANEL_SSH_KEY }}
+
       - name: Upload backend
         uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.CPANEL_HOST }}
           username: ${{ secrets.CPANEL_USERNAME }}
-          key: ${{ secrets.CPANEL_SSH_KEY }}
           port: ${{ secrets.CPANEL_PORT }}
           source: "backend.tar.gz"
           target: "~/jerseywersey-backend"
@@ -55,7 +59,6 @@ jobs:
         with:
           host: ${{ secrets.CPANEL_HOST }}
           username: ${{ secrets.CPANEL_USERNAME }}
-          key: ${{ secrets.CPANEL_SSH_KEY }}
           port: ${{ secrets.CPANEL_PORT }}
           script: |
             cd ~/jerseywersey-backend
@@ -70,4 +73,5 @@ jobs:
 
             npm install --omit=dev
 
-            touch tmp/restart.txt 2>/dev/null || true
+            mkdir -p tmp
+            touch tmp/restart.txt
