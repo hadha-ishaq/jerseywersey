@@ -53,30 +53,41 @@ jobs:
             backend.tar.gz \
             "${{ secrets.CPANEL_USERNAME }}@${{ secrets.CPANEL_HOST }}:~/jerseywersey-backend/"
 
-            - name: Deploy and restart
+      - name: Deploy and restart
         run: |
           ssh \
             -o StrictHostKeyChecking=no \
             -p "${{ secrets.CPANEL_PORT }}" \
             "${{ secrets.CPANEL_USERNAME }}@${{ secrets.CPANEL_HOST }}" << 'EOF'
 
+          set -e
+
           cd ~/jerseywersey-backend
 
+          echo "Extracting new Medusa build..."
+
           rm -rf .deploy
-          mkdir -p .deploy
+          mkdir .deploy
 
           tar -xzf backend.tar.gz -C .deploy
           rm backend.tar.gz
 
+          echo "Updating application files..."
+
           find . -mindepth 1 -maxdepth 1 \
             ! -name ".deploy" \
             ! -name ".env" \
+            ! -name "nodevenv" \
             -exec rm -rf {} +
 
           cp -a .deploy/. .
           rm -rf .deploy
 
+          echo "Installing production dependencies..."
+
           npm install --omit=dev
+
+          echo "Restarting application..."
 
           mkdir -p tmp
           touch tmp/restart.txt
