@@ -43,7 +43,7 @@ jobs:
       - name: Setup SSH
         uses: webfactory/ssh-agent@v0.9.1
         with:
-          ssh-private-key: ${{ secrets.CPANEL_SSH_KEY }}
+          ssh-private-key: ${{ secrets.CPANEL_SSH_KEY_FINAL }}
 
       - name: Upload backend
         uses: appleboy/scp-action@v0.1.7
