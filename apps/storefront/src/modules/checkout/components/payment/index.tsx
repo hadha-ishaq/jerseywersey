@@ -12,15 +12,22 @@ import PaymentContainer, {
 import Divider from "@modules/common/components/divider"
 import { Button, Container, Heading, Text, clx } from "@modules/common/components/ui"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
-import { useCallback, useEffect, useState } from "react"
+import { useCallback, useEffect, useMemo, useState } from "react"
 
 const Payment = ({
   cart,
   availablePaymentMethods,
+  customer,
 }: {
   cart: HttpTypes.StoreCart
   availablePaymentMethods: { id: string }[]
+  customer?: HttpTypes.StoreCustomer | null
 }) => {
+  const canUseRazorpay = Boolean(
+    (cart as HttpTypes.StoreCart & { customer_id?: string | null }).customer_id ||
+      customer?.id
+  )
+
   const activeSession =
     cart.payment_collection?.payment_sessions?.find(
       (paymentSession) =>
@@ -32,8 +39,26 @@ const Payment = ({
   const [error, setError] = useState<string | null>(null)
   const [cardBrand, setCardBrand] = useState<string | null>(null)
   const [cardComplete, setCardComplete] = useState(false)
+  const visiblePaymentMethods = useMemo(
+    () =>
+      availablePaymentMethods.filter(
+        (paymentMethod) =>
+          !isRazorpay(paymentMethod.id) || canUseRazorpay
+      ),
+    [availablePaymentMethods, canUseRazorpay]
+  )
+
+  const initialPaymentMethod =
+    (activeSession?.provider_id &&
+      visiblePaymentMethods.some(
+        (paymentMethod) => paymentMethod.id === activeSession.provider_id
+      ) &&
+      activeSession.provider_id) ||
+    visiblePaymentMethods[0]?.id ||
+    ""
+
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(
-    activeSession?.provider_id ?? ""
+    initialPaymentMethod
   )
 
   const searchParams = useSearchParams()
@@ -42,14 +67,38 @@ const Payment = ({
 
   const isOpen = searchParams.get("step") === "payment"
 
+  useEffect(() => {
+    if (
+      selectedPaymentMethod &&
+      !visiblePaymentMethods.some(
+        (paymentMethod) => paymentMethod.id === selectedPaymentMethod
+      )
+    ) {
+      setSelectedPaymentMethod(initialPaymentMethod)
+    }
+  }, [initialPaymentMethod, selectedPaymentMethod, visiblePaymentMethods])
+
+  useEffect(() => {
+    if (
+      selectedPaymentMethod &&
+      isRazorpay(selectedPaymentMethod) &&
+      !canUseRazorpay
+    ) {
+      setSelectedPaymentMethod(initialPaymentMethod)
+    }
+  }, [canUseRazorpay, initialPaymentMethod, selectedPaymentMethod])
+
   const setPaymentMethod = async (method: string) => {
     setError(null)
+
+    if (isRazorpay(method) && !canUseRazorpay) {
+      setError("Please sign in to use Razorpay")
+      return
+    }
+
     setSelectedPaymentMethod(method)
 
-    if (
-      (isStripeLike(method) || isRazorpay(method)) &&
-      activeSession?.provider_id !== method
-    ) {
+    if (isStripeLike(method) && activeSession?.provider_id !== method) {
       await initiatePaymentSession(cart, {
         provider_id: method,
       })
@@ -147,13 +196,13 @@ const Payment = ({
       </div>
 
       <div className={isOpen ? "block" : "hidden"}>
-        {!paidByGiftcard && availablePaymentMethods?.length > 0 && (
+        {!paidByGiftcard && visiblePaymentMethods?.length > 0 && (
           <RadioGroup
             value={selectedPaymentMethod}
             onChange={(value: string) => setPaymentMethod(value)}
             className="space-y-3"
           >
-            {availablePaymentMethods.map((paymentMethod) => (
+            {visiblePaymentMethods.map((paymentMethod) => (
               <div key={paymentMethod.id}>
                 {isStripeLike(paymentMethod.id) ? (
                   <StripeCardContainer
@@ -175,6 +224,25 @@ const Payment = ({
             ))}
           </RadioGroup>
         )}
+
+        {!paidByGiftcard &&
+          !canUseRazorpay &&
+          availablePaymentMethods.some((paymentMethod) =>
+            isRazorpay(paymentMethod.id)
+          ) && (
+            <Text className="mt-4 text-small-regular text-ui-fg-muted">
+              Sign in to use Razorpay. COD and card payment remain available for
+              guest checkout.
+            </Text>
+          )}
+
+        {!paidByGiftcard &&
+          !visiblePaymentMethods.length &&
+          availablePaymentMethods.length > 0 && (
+            <Text className="mt-4 text-small-regular text-ui-fg-muted">
+              No payment methods are currently available for this checkout.
+            </Text>
+          )}
 
         {paidByGiftcard && (
           <div className="flex flex-col gap-1">

@@ -70,7 +70,7 @@ const Item = ({
             <div className="flex items-start justify-between gap-3">
               <div className="min-w-0">
                 <Text
-                  className="text-base-semi text-ui-fg-base leading-6"
+                  className="line-clamp-2 text-base-semi leading-6 text-ui-fg-base"
                   data-testid="product-title"
                 >
                   {item.product_title}
@@ -154,12 +154,16 @@ const Item = ({
 
       <Table.Cell className="p-4 text-left align-top">
         <Text
-          className="txt-medium-plus text-ui-fg-base"
+          className="line-clamp-2 txt-medium-plus text-ui-fg-base"
           data-testid="product-title"
         >
           {item.product_title}
         </Text>
-        <LineItemOptions variant={item.variant} data-testid="product-variant" />
+        <LineItemOptions
+          variant={item.variant}
+          data-testid="product-variant"
+          className="line-clamp-1"
+        />
       </Table.Cell>
 
       {type === "full" && (

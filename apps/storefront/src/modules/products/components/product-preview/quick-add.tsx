@@ -61,7 +61,7 @@ const QuickAdd = ({ product, className }: QuickAddProps) => {
         type="button"
         onClick={handleAdd}
         disabled={isAdding}
-        className="font-display w-full bg-pitch/90 px-4 py-3 text-xs font-semibold uppercase tracking-widest text-white backdrop-blur-sm transition-all duration-300 hover:bg-pitch focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jersey disabled:cursor-wait disabled:opacity-60 small:translate-y-2 small:opacity-0 small:group-hover:translate-y-0 small:group-hover:opacity-100"
+        className="font-display hidden w-full bg-pitch/90 px-4 py-3 text-xs font-semibold uppercase tracking-widest text-white backdrop-blur-sm transition-all duration-300 hover:bg-pitch focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-jersey disabled:cursor-wait disabled:opacity-60 small:block small:translate-y-2 small:opacity-0 small:group-hover:translate-y-0 small:group-hover:opacity-100"
         data-testid="quick-add-button"
       >
         {isAdding ? "Adding..." : "Add to cart"}

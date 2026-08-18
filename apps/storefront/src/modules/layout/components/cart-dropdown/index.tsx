@@ -12,6 +12,7 @@ import DeleteButton from "@modules/common/components/delete-button"
 import LineItemOptions from "@modules/common/components/line-item-options"
 import LineItemPrice from "@modules/common/components/line-item-price"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
+import BagIcon from "@modules/common/icons/bag"
 import Thumbnail from "@modules/products/components/thumbnail"
 import { usePathname } from "next/navigation"
 import { Fragment, useEffect, useRef, useState } from "react"
@@ -80,10 +81,18 @@ const CartDropdown = ({
     >
       <LocalizedClientLink
         href="/cart"
-        className="flex h-full items-center px-2 py-1 text-xs font-semibold uppercase tracking-widest text-neutral-600 transition-colors hover:text-neutral-900 small:hidden"
+        className="relative inline-flex h-full items-center px-2 text-neutral-600 transition-colors hover:text-neutral-900 focus:outline-none small:hidden"
         data-testid="nav-cart-link-mobile"
       >
-        Cart ({totalItems})
+        <span className="relative inline-flex h-5 w-5 items-center justify-center">
+          <BagIcon size={18} className="text-neutral-900" />
+          {totalItems > 0 && (
+            <span className="absolute -right-2 -top-2 flex min-w-4 items-center justify-center rounded-full bg-jersey px-1.5 py-0.5 text-[10px] font-semibold leading-none text-white shadow-sm">
+              {totalItems > 99 ? "99+" : totalItems}
+            </span>
+          )}
+        </span>
+        <span className="sr-only">Cart ({totalItems})</span>
       </LocalizedClientLink>
 
       <Popover className="relative h-full">

@@ -28,6 +28,8 @@ type PaymentSessionLike = {
   }
 }
 
+const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
+
 const getActivePaymentSession = (sessions: PaymentSessionLike[]) => {
   return sessions.find(
     (session) =>
@@ -45,6 +47,9 @@ const PaymentButton: React.FC<PaymentButtonProps> = ({
   cart,
   "data-testid": dataTestId,
 }) => {
+  const hasCustomer = Boolean(
+    (cart as HttpTypes.StoreCart & { customer_id?: string | null }).customer_id
+  )
   const notReady =
     !cart ||
     !cart.shipping_address ||
@@ -71,6 +76,7 @@ const PaymentButton: React.FC<PaymentButtonProps> = ({
       return (
         <RazorpayPaymentButton
           notReady={notReady}
+          hasCustomer={hasCustomer}
           cart={cart}
           paymentSession={paymentSession}
           data-testid={dataTestId}
@@ -231,11 +237,13 @@ const RazorpayPaymentButton = ({
   cart,
   paymentSession,
   notReady,
+  hasCustomer,
   "data-testid": dataTestId,
 }: {
   cart: HttpTypes.StoreCart
   paymentSession?: PaymentSessionLike
   notReady: boolean
+  hasCustomer: boolean
   "data-testid"?: string
 }) => {
   const [submitting, setSubmitting] = useState(false)
@@ -251,11 +259,34 @@ const RazorpayPaymentButton = ({
     setSubmitting(false)
   }
 
+  const placeOrderWithRetry = async () => {
+    const attempts = 6
+
+    for (let attempt = 1; attempt <= attempts; attempt++) {
+      try {
+        await placeOrder()
+        return
+      } catch (err) {
+        const message = err instanceof Error ? err.message : String(err)
+
+        if (attempt === attempts) {
+          throw new Error(message)
+        }
+
+        await sleep(1500)
+      }
+    }
+  }
+
   const handlePayment = async () => {
     setSubmitting(true)
     setErrorMessage(null)
 
     try {
+      if (!hasCustomer) {
+        throw new Error("Please sign in to use Razorpay")
+      }
+
       const keyId = process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID
 
       if (!keyId) {
@@ -306,7 +337,7 @@ const RazorpayPaymentButton = ({
         },
         handler: async () => {
           try {
-            await placeOrder()
+            await placeOrderWithRetry()
           } catch (err) {
             handleFailure(
               err instanceof Error ? err.message : "Unable to complete order"
@@ -334,7 +365,7 @@ const RazorpayPaymentButton = ({
   return (
     <>
       <Button
-        disabled={notReady || !paymentSession || isRazorpayLoading}
+        disabled={notReady || !paymentSession || isRazorpayLoading || !hasCustomer}
         isLoading={submitting}
         onClick={handlePayment}
         size="large"

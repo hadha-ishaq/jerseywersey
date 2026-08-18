@@ -99,19 +99,30 @@ const Addresses = ({
         <div className="text-small-regular">
           {cart && cart.shipping_address ? (
             <div className="grid grid-cols-1 gap-6 small:grid-cols-3">
-              <div className="flex flex-col gap-1" data-testid="shipping-address-summary">
+              <div
+                className="flex flex-col gap-1"
+                data-testid="shipping-address-summary"
+              >
                 <Text className="jw-eyebrow text-ui-fg-subtle">
                   Shipping address
                 </Text>
-                <Text className="txt-medium text-ui-fg-base">
+                <Text className="txt-medium text-ui-fg-base small:hidden">
                   {cart.shipping_address.first_name}{" "}
                   {cart.shipping_address.last_name}
                 </Text>
-                <Text className="txt-medium text-ui-fg-subtle">
+                <Text className="txt-medium text-ui-fg-subtle small:hidden">
+                  {cart.shipping_address.city},{" "}
+                  {cart.shipping_address.postal_code}
+                </Text>
+                <Text className="hidden txt-medium text-ui-fg-base small:block">
+                  {cart.shipping_address.first_name}{" "}
+                  {cart.shipping_address.last_name}
+                </Text>
+                <Text className="hidden txt-medium text-ui-fg-subtle small:block">
                   {cart.shipping_address.address_1}{" "}
                   {cart.shipping_address.address_2}
                 </Text>
-                <Text className="txt-medium text-ui-fg-subtle">
+                <Text className="hidden txt-medium text-ui-fg-subtle small:block">
                   {cart.shipping_address.postal_code},{" "}
                   {cart.shipping_address.city}
                 </Text>
@@ -125,10 +136,16 @@ const Addresses = ({
                 data-testid="shipping-contact-summary"
               >
                 <Text className="jw-eyebrow text-ui-fg-subtle">Contact</Text>
-                <Text className="txt-medium text-ui-fg-base">
+                <Text className="txt-medium text-ui-fg-base small:hidden">
                   {cart.shipping_address.phone}
                 </Text>
-                <Text className="txt-medium text-ui-fg-subtle">
+                <Text className="txt-medium text-ui-fg-subtle small:hidden">
+                  {cart.email}
+                </Text>
+                <Text className="hidden txt-medium text-ui-fg-base small:block">
+                  {cart.shipping_address.phone}
+                </Text>
+                <Text className="hidden txt-medium text-ui-fg-subtle small:block">
                   {cart.email}
                 </Text>
               </div>
@@ -147,15 +164,23 @@ const Addresses = ({
                   </Text>
                 ) : (
                   <>
-                    <Text className="txt-medium text-ui-fg-base">
+                    <Text className="txt-medium text-ui-fg-base small:hidden">
                       {cart.billing_address?.first_name}{" "}
                       {cart.billing_address?.last_name}
                     </Text>
-                    <Text className="txt-medium text-ui-fg-subtle">
+                    <Text className="txt-medium text-ui-fg-subtle small:hidden">
+                      {cart.billing_address?.city},{" "}
+                      {cart.billing_address?.postal_code}
+                    </Text>
+                    <Text className="hidden txt-medium text-ui-fg-base small:block">
+                      {cart.billing_address?.first_name}{" "}
+                      {cart.billing_address?.last_name}
+                    </Text>
+                    <Text className="hidden txt-medium text-ui-fg-subtle small:block">
                       {cart.billing_address?.address_1}{" "}
                       {cart.billing_address?.address_2}
                     </Text>
-                    <Text className="txt-medium text-ui-fg-subtle">
+                    <Text className="hidden txt-medium text-ui-fg-subtle small:block">
                       {cart.billing_address?.postal_code},{" "}
                       {cart.billing_address?.city}
                     </Text>

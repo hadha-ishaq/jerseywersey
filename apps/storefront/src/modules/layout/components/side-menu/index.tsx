@@ -4,6 +4,7 @@ import { Popover, PopoverPanel, Transition } from "@headlessui/react"
 import useToggleState from "@lib/hooks/use-toggle-state"
 import { ArrowRightMini, XMark } from "@medusajs/icons"
 import { HttpTypes } from "@medusajs/types"
+import MenuIcon from "@modules/common/icons/menu"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
 import { clx } from "@modules/common/components/ui"
 import { Fragment } from "react"
@@ -31,10 +32,11 @@ const SideMenu = ({ regions, locales, currentLocale }: SideMenuProps) => {
               <div className="relative flex h-full">
                 <Popover.Button
                   data-testid="nav-menu-button"
-                  className="relative h-full flex items-center px-2 transition-all ease-out duration-200 focus:outline-none hover:text-neutral-600"
+                  className="relative inline-flex h-full items-center px-2 text-neutral-600 transition-colors hover:text-neutral-900 focus:outline-none"
                   aria-label="Open menu"
                 >
-                  Menu
+                  <MenuIcon size={18} className="small:hidden text-neutral-900" />
+                  <span className="hidden small:inline">Menu</span>
                 </Popover.Button>
               </div>
 

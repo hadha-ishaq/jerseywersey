@@ -1,11 +1,10 @@
 import { Listbox, Transition } from "@headlessui/react"
-import { ChevronUpDown } from "@medusajs/icons"
-import { clx } from "@modules/common/components/ui"
-import { Fragment, useMemo } from "react"
-
 import compareAddresses from "@lib/util/compare-addresses"
 import { HttpTypes } from "@medusajs/types"
 import Radio from "@modules/common/components/radio"
+import { ChevronUpDown } from "@medusajs/icons"
+import { clx } from "@modules/common/components/ui"
+import { Fragment, useMemo } from "react"
 
 type AddressSelectProps = {
   addresses: HttpTypes.StoreCustomerAddress[]
@@ -23,6 +22,7 @@ const AddressSelect = ({
 }: AddressSelectProps) => {
   const handleSelect = (id: string) => {
     const savedAddress = addresses.find((a) => a.id === id)
+
     if (savedAddress) {
       onSelect(savedAddress as HttpTypes.StoreCartAddress)
     }
@@ -41,9 +41,9 @@ const AddressSelect = ({
         >
           {({ open }) => (
             <>
-              <span className="block truncate">
+              <span className="block line-clamp-2 pr-3">
                 {selectedAddress
-                  ? selectedAddress.address_1
+                  ? `${selectedAddress.first_name} ${selectedAddress.last_name} / ${selectedAddress.address_1}`
                   : "Choose an address"}
               </span>
               <ChevronUpDown
@@ -54,6 +54,7 @@ const AddressSelect = ({
             </>
           )}
         </Listbox.Button>
+
         <Transition
           as={Fragment}
           leave="transition ease-in duration-100"
@@ -69,9 +70,9 @@ const AddressSelect = ({
                 <Listbox.Option
                   key={address.id}
                   value={address.id}
-                className="relative cursor-default select-none py-4 pl-4 pr-4 hover:bg-neutral-50"
-                data-testid="shipping-address-option"
-              >
+                  className="relative cursor-default select-none px-4 py-4 hover:bg-neutral-50"
+                  data-testid="shipping-address-option"
+                >
                   <div className="flex items-start gap-x-3">
                     <Radio
                       checked={selectedAddress?.id === address.id}
@@ -86,12 +87,10 @@ const AddressSelect = ({
                           {address.company}
                         </span>
                       )}
-                      <div className="flex flex-col text-left text-base-regular mt-2">
+                      <div className="mt-2 flex flex-col text-left text-base-regular">
                         <span>
                           {address.address_1}
-                          {address.address_2 && (
-                            <span>, {address.address_2}</span>
-                          )}
+                          {address.address_2 && <span>, {address.address_2}</span>}
                         </span>
                         <span>
                           {address.postal_code}, {address.city}
