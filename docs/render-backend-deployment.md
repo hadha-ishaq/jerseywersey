@@ -6,7 +6,7 @@ Use these settings to deploy the Medusa backend from this monorepo to Render.
 
 ## 1. Create Services
 
-Create or choose your PostgreSQL database first. For your planned setup, use Supabase and set `DATABASE_URL` to the Supabase direct or Session Pooler connection string. If you use Render Postgres instead, use Render's internal connection URL.
+Create or choose your PostgreSQL database first. For your planned setup, use Supabase and set `DATABASE_URL` to the Supabase Session Pooler connection string. If you use Render Postgres instead, use Render's internal connection URL.
 
 Create a Node.js web service for the backend:
 
@@ -25,7 +25,7 @@ Set these on the backend web service:
 ```text
 NODE_VERSION=20
 NODE_ENV=production
-DATABASE_URL=<Postgres connection URL>
+DATABASE_URL=<Supabase Session Pooler or Postgres connection URL>
 DATABASE_SSL=true
 DATABASE_POOL_MIN=0
 DATABASE_POOL_MAX=3

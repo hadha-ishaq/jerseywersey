@@ -96,11 +96,13 @@ Create a Supabase project and copy a Postgres connection string.
 
 For Render backend runtime, prefer this order:
 
-1. Direct connection, if Render can reach it.
-2. Supabase Session Pooler, if direct connection fails or your Supabase project is IPv6-only.
+1. Supabase Session Pooler.
+2. Direct connection, only if Render can reach it.
 3. Transaction Pooler only if you know your database client works without prepared statements.
 
 Set the chosen string as Render's `DATABASE_URL`.
+
+If Render logs `ECONNREFUSED`, your `DATABASE_URL` host/port is unreachable from Render. Switch to Supabase's Session Pooler connection string. In Supabase, open Project Settings > Database > Connection string and choose the pooler/session connection. Do not use the local Supabase dashboard URL, API URL, or anon key.
 
 Recommended Supabase-related backend env:
 
@@ -196,6 +198,7 @@ Root Directory: apps/storefront
 Install Command: npm install
 Build Command: npm run build
 Output Directory: .next
+Node.js Version: 20.x
 ```
 
 Set these Vercel environment variables for Production and Preview:
@@ -279,6 +282,16 @@ DATABASE_POOL_MAX=3
 ```
 
 If it still happens, switch `DATABASE_URL` to Supabase's Session Pooler connection string and restart the Render service.
+
+### Render `ECONNREFUSED`
+
+This means Render cannot open a network connection to the Postgres host/port in `DATABASE_URL`. It is not a Medusa route or port-binding bug.
+
+Use Supabase's Session Pooler connection string for `DATABASE_URL`, keep `DATABASE_SSL=true`, and redeploy Render. The backend cannot bind its HTTP port until it connects to Postgres, so Render will show "No open ports detected" while the database connection is failing.
+
+### Vercel `Cannot find module 'ansi-colors'`
+
+This was caused by `next.config.js` loading `check-env-variables.js`, which required a dev-only formatting package. The checker no longer depends on `ansi-colors`. Redeploy after committing `apps/storefront/check-env-variables.js`.
 
 ### Storefront redirects to the wrong country
 

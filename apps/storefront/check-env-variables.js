@@ -1,4 +1,11 @@
-const c = require("ansi-colors");
+const c = {
+  bold: (value) => value,
+  dim: (value) => value,
+  red: {
+    bold: (value) => value,
+  },
+  yellow: (value) => value,
+};
 
 const requiredEnvs = [
   {
