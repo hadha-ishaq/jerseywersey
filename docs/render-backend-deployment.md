@@ -1,17 +1,19 @@
 # Render Backend Deployment
 
+For the full Supabase + Render backend + Vercel storefront flow, use [Production Build and Deployment Guide](production-build-and-deployment.md). This file is the backend-only Render checklist.
+
 Use these settings to deploy the Medusa backend from this monorepo to Render.
 
 ## 1. Create Services
 
-Create a Render PostgreSQL database first, in the same region as the backend web service. Use the database's internal connection URL for `DATABASE_URL` because Render-hosted services in the same region can connect over Render's private network.
+Create or choose your PostgreSQL database first. For your planned setup, use Supabase and set `DATABASE_URL` to the Supabase direct or Session Pooler connection string. If you use Render Postgres instead, use Render's internal connection URL.
 
 Create a Node.js web service for the backend:
 
 ```text
 Root Directory: .
-Build Command: npm install && npm run build --workspace=@dtc/backend
-Start Command: npm run start --workspace=@dtc/backend
+Build Command: npm ci --include=dev && npm run backend:build
+Start Command: npm run backend:start
 ```
 
 The start command uses `apps/backend/package.json`, which runs `scripts/start-medusa.js`. That wrapper starts the compiled Medusa server from `apps/backend/.medusa/server`, binds to Render's `PORT`, and disables Medusa telemetry for production.
@@ -23,7 +25,10 @@ Set these on the backend web service:
 ```text
 NODE_VERSION=20
 NODE_ENV=production
-DATABASE_URL=<Render internal Postgres URL>
+DATABASE_URL=<Postgres connection URL>
+DATABASE_SSL=true
+DATABASE_POOL_MIN=0
+DATABASE_POOL_MAX=3
 JWT_SECRET=<long random string>
 COOKIE_SECRET=<long random string>
 STORE_CORS=https://<your-storefront-domain>
@@ -49,7 +54,7 @@ Render sets `PORT` automatically. The backend start wrapper sets `HOST=0.0.0.0` 
 On paid Render web services, set this as the Pre-deploy Command:
 
 ```text
-cd apps/backend && npm exec medusa db:migrate
+npm run backend:migrate
 ```
 
 If your Render plan does not support pre-deploy commands, run the same command from a one-off shell before the first production start and after deployments that add migrations.
@@ -59,7 +64,7 @@ If your Render plan does not support pre-deploy commands, run the same command f
 After the first successful deploy and migration, open a Render shell for the backend service and run:
 
 ```text
-cd apps/backend && npm exec medusa user -e admin@example.com -p "replace-with-a-strong-password"
+cd apps/backend && npm run admin:user -- -e admin@example.com -p "replace-with-a-strong-password"
 ```
 
 Then open:
@@ -89,6 +94,6 @@ Start Command: npm run start --workspace=@dtc/storefront
 
 ## Notes
 
-- Do not deploy files from `apps/backend/.medusa` directly. Render should build them with `npm run build --workspace=@dtc/backend`.
+- Do not deploy files from `apps/backend/.medusa` directly. Render should build them with `npm run backend:build`.
 - After changing `STORE_CORS`, `ADMIN_CORS`, or `AUTH_CORS`, redeploy the backend.
 - If you use Render Redis, replace the local event bus / in-memory locking warnings by configuring Redis-backed Medusa modules separately.

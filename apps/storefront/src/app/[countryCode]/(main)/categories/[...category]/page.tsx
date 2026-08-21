@@ -7,6 +7,7 @@ import { HttpTypes, StoreRegion } from "@medusajs/types"
 import CategoryTemplate from "@modules/categories/templates"
 import { SortOptions } from "@modules/store/components/refinement-list/sort-products"
 import { parseOptionValueIds } from "@lib/util/product-option-filters"
+import { shouldBuildStaticCatalogPages } from "@lib/util/static-generation"
 
 type Props = {
   params: Promise<{ category: string[]; countryCode: string }>
@@ -20,30 +21,43 @@ type Props = {
 }
 
 export async function generateStaticParams() {
-  const product_categories = await listCategories()
-
-  if (!product_categories) {
+  if (!shouldBuildStaticCatalogPages()) {
     return []
   }
 
-  const countryCodes = await listRegions().then((regions: StoreRegion[]) =>
-    regions?.map((r) => r.countries?.map((c) => c.iso_2)).flat()
-  )
+  try {
+    const product_categories = await listCategories()
 
-  const categoryHandles = product_categories.map(
-    (category: HttpTypes.StoreProductCategory) => category.handle
-  )
+    if (!product_categories) {
+      return []
+    }
 
-  const staticParams = countryCodes
-    ?.map((countryCode: string | undefined) =>
-      categoryHandles.map((handle: string) => ({
-        countryCode,
-        category: [handle],
-      }))
+    const countryCodes = await listRegions().then((regions: StoreRegion[]) =>
+      regions?.map((r) => r.countries?.map((c) => c.iso_2)).flat()
     )
-    .flat()
 
-  return staticParams
+    const categoryHandles = product_categories.map(
+      (category: HttpTypes.StoreProductCategory) => category.handle
+    )
+
+    const staticParams = countryCodes
+      ?.map((countryCode: string | undefined) =>
+        categoryHandles.map((handle: string) => ({
+          countryCode,
+          category: [handle],
+        }))
+      )
+      .flat()
+
+    return staticParams
+  } catch (error) {
+    console.error(
+      `Failed to generate static paths for category pages: ${
+        error instanceof Error ? error.message : "Unknown error"
+      }.`
+    )
+    return []
+  }
 }
 
 export async function generateMetadata(props: Props): Promise<Metadata> {
