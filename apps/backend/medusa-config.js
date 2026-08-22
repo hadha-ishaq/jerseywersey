@@ -10,25 +10,25 @@ const shouldUseDatabaseSsl =
 module.exports = defineConfig({
   projectConfig: {
     databaseUrl: process.env.DATABASE_URL,
-    databaseDriverOptions: {
-      ...(shouldUseDatabaseSsl
-        ? {
-            connection: {
-              ssl: {
-                rejectUnauthorized: false,
-              },
-            },
-          }
-        : {}),
-      pool: {
-        min: databasePoolMin,
-        max: databasePoolMax,
-        idleTimeoutMillis: Number.parseInt(
-          process.env.DATABASE_POOL_IDLE_TIMEOUT_MS || "10000",
-          10
-        ),
-      },
-    },
+    // databaseDriverOptions: {
+    //   ...(shouldUseDatabaseSsl
+    //     ? {
+    //         connection: {
+    //           ssl: {
+    //             rejectUnauthorized: false,
+    //           },
+    //         },
+    //       }
+    //     : {}),
+    //   pool: {
+    //     min: databasePoolMin,
+    //     max: databasePoolMax,
+    //     idleTimeoutMillis: Number.parseInt(
+    //       process.env.DATABASE_POOL_IDLE_TIMEOUT_MS || "10000",
+    //       10
+    //     ),
+    //   },
+    // },
 
     http: {
       storeCors: process.env.STORE_CORS,

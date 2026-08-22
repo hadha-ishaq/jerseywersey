@@ -1,0 +1,80 @@
+# name: Deploy Storefront to cPanel
+
+# on:
+#   push:
+#     branches:
+#       - main
+#   workflow_dispatch:
+
+# concurrency:
+#   group: cpanel-storefront-${{ github.ref }}
+#   cancel-in-progress: true
+
+# jobs:
+#   deploy:
+#     name: Build and deploy storefront
+#     runs-on: ubuntu-latest
+
+#     env:
+#       NEXT_PUBLIC_MEDUSA_BACKEND_URL: ${{ secrets.NEXT_PUBLIC_MEDUSA_BACKEND_URL }}
+#       NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY: ${{ secrets.NEXT_PUBLIC_MEDUSA_PUBLISHABLE_KEY }}
+#       NEXT_PUBLIC_BASE_URL: ${{ secrets.NEXT_PUBLIC_BASE_URL }}
+#       NEXT_PUBLIC_DEFAULT_REGION: ${{ secrets.NEXT_PUBLIC_DEFAULT_REGION }}
+#       NEXT_PUBLIC_BUILD_STATIC_CATALOG_PAGES: "false"
+#       NEXT_PUBLIC_RAZORPAY_KEY_ID: ${{ secrets.NEXT_PUBLIC_RAZORPAY_KEY_ID }}
+#       NEXT_PUBLIC_STRIPE_KEY: ${{ secrets.NEXT_PUBLIC_STRIPE_KEY }}
+#       NEXT_PUBLIC_MEDUSA_PAYMENTS_PUBLISHABLE_KEY: ${{ secrets.NEXT_PUBLIC_MEDUSA_PAYMENTS_PUBLISHABLE_KEY }}
+#       NEXT_PUBLIC_MEDUSA_PAYMENTS_ACCOUNT_ID: ${{ secrets.NEXT_PUBLIC_MEDUSA_PAYMENTS_ACCOUNT_ID }}
+
+#     steps:
+#       - name: Checkout repository
+#         uses: actions/checkout@v4
+
+#       - name: Use Node.js 20
+#         uses: actions/setup-node@v4
+#         with:
+#           node-version: 20.20.2
+#           cache: npm
+
+#       - name: Install dependencies
+#         run: npm ci --include=dev
+
+#       - name: Build storefront
+#         run: npm run storefront:build
+
+#       - name: Configure SSH
+#         shell: bash
+#         run: |
+#           mkdir -p ~/.ssh
+#           printf '%s\n' "${{ secrets.CPANEL_SSH_PRIVATE_KEY }}" > ~/.ssh/cpanel_key
+#           chmod 600 ~/.ssh/cpanel_key
+#           ssh-keyscan -p "${{ secrets.CPANEL_SSH_PORT || '22' }}" "${{ secrets.CPANEL_HOST }}" >> ~/.ssh/known_hosts
+
+#       - name: Sync files to cPanel
+#         shell: bash
+#         run: |
+#           rsync -az --delete \
+#             -e "ssh -i ~/.ssh/cpanel_key -p ${{ secrets.CPANEL_SSH_PORT || '22' }}" \
+#             --exclude ".git/" \
+#             --exclude ".github/" \
+#             --exclude "node_modules/" \
+#             --exclude "apps/*/node_modules/" \
+#             --exclude "apps/backend/.env" \
+#             --exclude "apps/storefront/.env.local" \
+#             --exclude "apps/backend/.medusa/" \
+#             --exclude "apps/backend/.config/" \
+#             --exclude "apps/backend/.turbo/" \
+#             --exclude "apps/storefront/.turbo/" \
+#             --exclude ".turbo/" \
+#             ./ "${{ secrets.CPANEL_USER }}@${{ secrets.CPANEL_HOST }}:${{ secrets.CPANEL_APP_PATH }}/"
+
+#       - name: Install production dependencies and restart app
+#         shell: bash
+#         run: |
+#           ssh -i ~/.ssh/cpanel_key -p "${{ secrets.CPANEL_SSH_PORT || '22' }}" "${{ secrets.CPANEL_USER }}@${{ secrets.CPANEL_HOST }}" << 'EOF'
+#             set -e
+#             cd "${{ secrets.CPANEL_APP_PATH }}"
+#             npm ci --omit=dev
+#             mkdir -p tmp
+#             touch tmp/restart.txt
+#           EOF
